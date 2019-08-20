@@ -49,28 +49,40 @@ class Landscape(Drawing):
     return coord in self.busy and self.busy[coord] == char
 
 """
-The bug has specific methods and fields.
-New fields: the first occurence of a relevant character in the read
-direction (up/down, left/right) is the anchor: we store its local position
+The Bug has specific methods.
+The first occurence of a relevant character in the read
+direction (up/down, left/right) is the anchor, or local origin.
+
+We find it and then recalculate all coordinates such that the origin is always at (0, 0)
 """
 class Bug(Drawing):
   def __init__(self, file):
     super().__init__(file)
 
     # The first occurence of a char in the read direction (up/down, left/right) is the anchor
-    self.anchor = None
+    anchor = None
 
     for coord, char in self.busy.items():
-      if self.anchor is None or coord[1] < self.anchor[1] or (coord[1] == self.anchor[1] and coord[0] < self.anchor[0]):
-        self.anchor = coord
+      if anchor is None or coord[1] < anchor[1] or (coord[1] == anchor[1] and coord[0] < anchor[0]):
+        anchor = coord
+
+    # Recalculate all coordinates to have anchor always at (0, 0)
+    recalc = {}
+    for coord, char in self.busy.items():
+      x = coord[0] - anchor[0]
+      y = coord[1] - anchor[1]
+      recalc[(x, y)] = char
+    self.busy = recalc
 
   """
   Match all relevant chars with the given landscape at the given position
   """
   def match_all(self, landscape, start):
     # All relevant squares must be correct aligned and matched
+    # print('Match at', start)
     for bug_coord, char in self.busy.items():
       # Transform bug coordinates to landscape coordinates:
+      # print('Bug coord', bug_coord)
       landscape_x = start[0] + bug_coord[0]
       landscape_y = start[1] + bug_coord[1]
       if not landscape.check_char_at((landscape_x, landscape_y), char):
@@ -78,14 +90,14 @@ class Bug(Drawing):
     return True
 
   """
-  Count the occurences in the given landscape
+  Count the own pattern occurences in the given landscape
   """
   def count_occurences(self, landscape):
     occurences = 0
-    # First we match the anchor:
-    for start in landscape.first_matches(self.busy[self.anchor]):
-      # Small optimization: skip misaligned start positions (too far left):
-      if start[0] >= self.anchor[0] and self.match_all(landscape, start):
+    # First we match the origin:
+    for start in landscape.first_matches(self.busy[(0, 0)]):
+      # We could optimize a bit if we would collect already matched chars
+      if self.match_all(landscape, start):
         occurences += 1
     return occurences
 
