@@ -14,7 +14,7 @@ class Drawing:
     try:
       ofile = open(file, 'r')
     except IOError:
-      print('File', file, 'not found')
+      print 'File', file, 'not found'
       exit(0)
 
     self.busy = {}
@@ -104,8 +104,8 @@ class Bug(Drawing):
 if __name__ == '__main__':
   # We need 2 arguments, the bug file and the landscape file
   if len(sys.argv) != 3:
-    print('Arguments error: exactly 2 arguments (file names) are needed.')
-    print('Usage: find-the-bug.py bug-file landscape-file')
+    print 'Arguments error: exactly 2 arguments (file names) are needed.'
+    print 'Usage: find-the-bug.py bug-file landscape-file'
     exit(1)
 
   bug = Bug(sys.argv[1])
@@ -115,4 +115,4 @@ if __name__ == '__main__':
   # print('Landscape:', landscape.busy)
 
   occ = bug.count_occurences(landscape)
-  print('Occurences:', occ)
+  print 'Occurences:', occ
