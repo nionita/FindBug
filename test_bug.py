@@ -22,3 +22,17 @@ def test_landscape_landscape():
 
   occ = bug.count_occurences(landscape)
   assert occ == 1
+
+def test_bug_landscape2():
+  bug = Bug('bug.txt')
+  landscape = Landscape('landscape2.txt')
+
+  occ = bug.count_occurences(landscape)
+  assert occ == 4
+
+def test_bug2_landscape2():
+  bug = Bug('bug2.txt')
+  landscape = Landscape('landscape2.txt')
+
+  occ = bug.count_occurences(landscape)
+  assert occ == 1
