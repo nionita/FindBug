@@ -57,7 +57,8 @@ We find it and then recalculate all coordinates such that the origin is always a
 """
 class Bug(Drawing):
   def __init__(self, file):
-    super(Bug, self).__init__(file)
+    #super(Bug, self).__init__(file)
+    Drawing.__init__(self, file)
 
     # The first occurence of a char in the read direction (up/down, left/right) is the anchor
     anchor = None
