@@ -28,7 +28,8 @@ def test_bug_landscape2():
   landscape = Landscape('landscape2.txt')
 
   occ = bug.count_occurences(landscape)
-  assert occ == 4
+  # The bigger bug contains the smaller bug, so it counts too
+  assert occ == 5
 
 def test_bug2_landscape2():
   bug = Bug('bug2.txt')
